@@ -4,6 +4,7 @@ const app = express()
 
 const {PORT} = require('./config/serverConfig')
 const apiRoutes = require('./routes/index')
+const db = require('./models/index')
 
 const setUpAndStartServer = ()=>{
 
@@ -12,8 +13,12 @@ const setUpAndStartServer = ()=>{
 
     app.use('api', apiRoutes)
 
+
     app.listen(PORT, ()=>{
         console.log(`Server is running on ${PORT}`);
+        if(process.env.DB_SYNC){
+            db.sequelize.sync({alter: true})
+        }
     })
 
 }
